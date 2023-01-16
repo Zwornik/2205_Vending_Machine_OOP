@@ -1,10 +1,13 @@
 """Snacks container in the machine"""
 
+
 class Storage:
 
-    SNACK_NAMES = {'1': 'CHOCOLATE', '2': 'MUESLI BAR', '3': 'APPLE', '4': 'POPCORN', '5': 'CHEESE PUFFS'}  # user
+    SNACK_NAMES = {1: 'CHOCOLATE', 2: 'MUESLI BAR', 3: 'APPLE', 4: 'POPCORN', 5: 'CHEESE PUFFS'}  # user
                     # selection number assigned to snack names
-    snacks_in = dict
+
+    def __init__(self):
+        self.snacks_in = dict  # ???? is that declaration ok?
 
     def auto_supply(self):  # automatically insert snack supply
         self.snacks_in = {'CHOCOLATE': 5, 'MUESLI BAR': 5, 'APPLE': 5, 'POPCORN': 5,
