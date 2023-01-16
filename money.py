@@ -1,14 +1,13 @@
+"""Money container in the machine"""
+
 class Money:
-    INIT_NOMINATIONS = {200: 6, 100: 6, 50: 0, 20: 2, 10: 1, 5: 3, 2: 2, 1: 2, }  # initial nominations machine contains
+    INIT_NOMINATIONS = {200: 6, 100: 6, 50: 0, 20: 2, 10: 1, 5: 333, 2: 22, 1: 2, }  # initial nominations machine contains
 
     def __init__(self):
         self.money_in = Money.INIT_NOMINATIONS.copy()  # Coins container, stores info about nominations in the machine
         self.initial_value = self.amount_in()  # Money in machine at the beginning of the day
 
     def coins_in(self):  # list nominations possessed
-        print("Nomination   Pieces")
-        [(print("{0:>7}    {1:>6}".format(key, value))) for key, value in self.money_in.items()]
-        print("TOTAL        {0:.2f} GBP".format(self.amount_in() / 100))
         return self.money_in
 
     def amount_in(self):  # print amount possessed
@@ -30,7 +29,6 @@ class Money:
     def return_change(self, user_amount, basket_value):  # return change after payment e.g. cash = {1:3, 10:2, 100:1},
         # basket = {'CHOCOLATE': 1, 'APPLE': 3, }, user money
         change = user_amount - basket_value  # change to return to user
-        unavailable_coins = []
         change_coins = {}  # Coins to be returned
         change_value = 0  # Value of all returned coins
         returned = True  # Flags if full amount was returned
@@ -46,9 +44,6 @@ class Money:
                 quotient = change // i
                 while quotient > self.money_in[i]:  # check if coins are available
                     quotient -= 1
-                    # if i not in unavailable_coins:
-                    #     unavailable_coins.append(i)  # adds unavailable coin to list of unavailable coins
-                    #     print(unavailable_coins)
                 if quotient > 0:
                     change -= i * quotient  # reduces money to return by number of available nominal
                     self.money_in[i] -= quotient  # subtracts coins from coins container
