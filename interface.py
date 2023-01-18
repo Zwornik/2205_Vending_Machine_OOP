@@ -1,6 +1,7 @@
 from storage import Storage
 
-"""It is machine touch display showing messages to the user and collecting user inputs"""
+"""It is machine touch screen showing messages to the user and collecting user inputs.
+    It also gives snacks (by displaying them) and return change (by displaying coins)."""
 
 
 class Interface:
@@ -50,20 +51,22 @@ class Interface:
 
     def print_table(self, content):  # ???? function modified depending on type.
         # When new type added another ELIF would have to be added
+        if len(content) > 0:
+            if type(list(content.keys())[0]) == str:  # Find the longest key in content(dict). Keys are strings
+                longest = max(len(x) for x in content)
+                justify = "<"
+                text = "{0:<{2}}    {1:>6d}\n".format('TOTAL', sum(content.values()), longest)
+            else:  # Keys are integers
+                longest = str(max(x for x in content))
+                longest = len(longest)
+                justify = ">"
+                text = "{0:>{2}} £{1:>6.2f}\n".format('TOTAL', sum(k * v for k, v in content.items()) / 100 , longest)
 
-        if type(list(content.keys())[1]) == str:  # Find the longest key in content(dict). Keys are strings
-            longest = max(len(x) for x in content)
-            justify = "<"
-            text = "{0:<{2}}    {1:>6d}\n".format('TOTAL', sum(content.values()), longest)
-        else:  # Keys are integers
-            longest = str(max(x for x in content))
-            longest = len(longest)
-            justify = ">"
-            text = "{0:>{2}} £{1:>6.2f}\n".format('TOTAL', sum(content.values()) / 100, longest)
-
-        print("{0:{3}{2}}    {1:>6}".format("Item", "Quantity", longest, justify))
-        [(print("{0:{3}{2}}    {1:>6}".format(key, value, longest, justify))) for key, value in content.items()]
-        print(text)
+            print("{0:{3}{2}}    {1:>6}".format("Item", "Quantity", longest, justify))
+            [(print("{0:{3}{2}}    {1:>6}".format(key, value, longest, justify))) for key, value in content.items()]
+            print(text)
+        else:
+            print("None.")
 
     def i_contain_value_msg(self, value):  # prints value of money in the machine
         print('I contain £{:.2f} of change.'.format(value / 100))
@@ -80,7 +83,7 @@ class Interface:
                     user_choice = int(user_choice)
                     return user_choice
                 else:
-                    if user_choice  == '1gbp':
+                    if user_choice == '1gbp':
                         user_choice = '100p'
                     elif user_choice == '2gbp':
                         user_choice = '200p'
@@ -99,3 +102,29 @@ class Interface:
     def inefficient_funds_msg(self):
         print("Insufficient funds. Please add more coins. ")
 
+    def small_menu(self):
+        print("Select a snack (1-5), confirm (0) or insert more coins")
+
+    def change_return_msg(self, change_coins):
+        if len(change_coins) > 0:
+            print("Here is your change in following coins:")
+            self.print_table(change_coins)
+        else:
+            print("No change to be returned.")
+
+    def snacks_bought_msg(self, snacks):
+        if len(snacks) > 0:
+            print("Here you have snacks you bought:")
+            self.print_table(snacks)
+            print("HAVE A GOOD MEAL!")
+        else:
+            print("You haven't selected any snack. \nThank you for using this machine. ")
+
+    def no_change_msg(self, missing):
+        print(f'Upsss! \n'
+              f'I contain no more coins so I am not able to give you remaining £{missing/100} change.\n'
+              f'Please write to Prime Minister to get your money back.\n'
+              f'SORRY :-(')
+
+    def you_added_msg(self, coin):
+        print("You added")

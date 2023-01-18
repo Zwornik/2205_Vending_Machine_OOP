@@ -1,7 +1,7 @@
 """Money container in the machine"""
 
 class Money:
-    INIT_NOMINATIONS = {200: 6, 100: 6, 50: 0, 20: 2, 10: 1, 5: 333, 2: 22, 1: 2, }  # initial nominations machine contains
+    INIT_NOMINATIONS = {200: 2, 100: 2, 50: 2, 20: 2, 10: 2, 5: 2, 2: 2, 1: 2, }  # initial nominations machine contains
 
     def __init__(self):
         self.money_in = Money.INIT_NOMINATIONS.copy()  # Coins container, stores info about nominations in the machine
@@ -26,8 +26,7 @@ class Money:
     def income_today(self):  # calculate income since last reset
         return self.initial_value - self.amount_in()
 
-    def return_change(self, user_amount, basket_value):  # return change after payment e.g. cash = {1:3, 10:2, 100:1},
-        # basket = {'CHOCOLATE': 1, 'APPLE': 3, }, user money
+    def return_change(self, user_amount, basket_value):  # return change after payment deducting coins from sel.money_in
         change = user_amount - basket_value  # change to return to user
         change_coins = {}  # Coins to be returned
         change_value = 0  # Value of all returned coins
@@ -38,7 +37,7 @@ class Money:
                 change -= i  # Reduce balance to return
                 self.money_in[i] -= 1  # Subtracts coin from coins container
                 change_coins[i] = 1  # Add coin to be returned
-                return change_coins
+                return change_coins, 0, False
 
             elif change > i:  # return change of more than a single coins
                 quotient = change // i
@@ -48,10 +47,12 @@ class Money:
                     change -= i * quotient  # reduces money to return by number of available nominal
                     self.money_in[i] -= quotient  # subtracts coins from coins container
                     change_coins[i] = quotient  # Add coins to be returned
-            print(change)
+
         for k, v in change_coins.items():  # Calculate value of all returned coins
             change_value += k * v
         if change:  # Check if full amount was returned
             returned = False
-        return change_coins, change_value, returned  # e.g. ({50: 1, 20: 2, 5: 1, 1:3}, 78, True)
+        return change_coins, (user_amount - change_value), returned  # e.g. ({50: 1, 20: 2, 5: 1, 1:3},
+        # 13 /amount that can not be returned because lack of coins/, True)
+
 

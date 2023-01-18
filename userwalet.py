@@ -1,6 +1,7 @@
-"""Represents an User cash in the machine"""
+"""Represents an User walet in the machine"""
 
-class User_cash:
+
+class User_walet:
 
     def __init__(self):
         self.coins = {}  # Contains user coins e.g. {20: 2, 10: 1, 2: 2, 1: 2}
@@ -16,8 +17,12 @@ class User_cash:
             self.coins[coin] += 1
         else:
             self.coins[coin] = 1
+        print(self.coins)
 
-    def user_coins(self):
+    def user_coins(self):  # ???? Wouldn't be better just to read value of COINS directly without using method?
         return self.coins
+
+    def reset_user_coins(self):
+        self.coins = {}
 
 
