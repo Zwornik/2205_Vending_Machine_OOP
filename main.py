@@ -10,9 +10,9 @@ money = Money()  # Represents money container in the machine
 user_walet = User_walet()  # Represents an User cash in the machine
 interface = Interface()  # It is machine touch display showing messages to the user and collecting user inputs
 basket = Basket()
+
+
 def main():
-
-
 
     if interface.load_menu():  # Ask if user wants to load snacks manually to the machine. True if yes.
         add_snack = interface.add_snack()  # Collect snack loaded to the machine
@@ -28,30 +28,29 @@ def main():
 
     return storage, money, user_walet, interface, basket
 
+
 def shopping_sequence():
     while True:  # main shopping loop
         user_money = user_walet.user_value()
         user_input = interface.user_input()
-        print(user_money, "user inp", basket.basket_value())
 
-        if user_input in (1, 2, 3, 4, 5) and user_money >= basket.basket_value():  # User adds snack to his basket
+        if user_input in (1, 2, 3, 4, 5) and user_money >= basket.basket_value() + 10:  # User adds snack to his basket
             snack = storage.SNACK_NAMES[user_input]  # Selected snack name
-            print("1-5 snack", snack)
-            basket.add_snack(snack)  # Add snack to the basket
+            if storage.check_snack(user_input) > 0:
+                basket.add_snack(snack)  # Add snack to the basket
+                interface.your_basket_msg(basket.basket_inventory())
 
-        elif user_input in (1, 2, 3, 4, 5) and user_money < basket.basket_value():  # User adds snack to his basket but
-            # has no money
-            print("1-5 no money")
-            interface.inefficient_funds_msg()  # Display message about insufficient funds.
+        elif user_input in (1, 2, 3, 4, 5) and user_money < basket.basket_value() + 10:  # User adds snack to his
+            # basket but has no money
+            interface.inefficient_funds_msg(basket.basket_value() + 10 - user_money)  # Display message about
+            # insufficient funds.
 
         elif user_input == 0:  # User confirms purchase
-            print("0")
-
             money.add_money(user_walet.user_coins())  # Add user coins to the machine
             change_returned = money.return_change(user_walet.user_value(), basket.basket_value())  # e.g. ({dict of
-            # coins to be returned}, return amount, True if whole amount was returned)
+            # coins to be returned}, returned amount, Amount not returned)
             print(change_returned, change_returned[0])
-            interface.change_return_msg(change_returned[0])  # Display returned coins
+            interface.change_return_msg(change_returned[0], change_returned[1])  # Display returned coins
             print(money.money_in)
             storage.give_snacks(basket.basket_has)  # Deducting snack from basket from machine inventory
             print(storage.snack_inventory())
@@ -60,21 +59,16 @@ def shopping_sequence():
                 interface.no_change_msg(change_returned[1])
             basket.reset_basket()  # Reset basket to empty
             user_walet.reset_user_coins()  # Empty user money
+            break
+
         elif user_input == 6:  # User wants to see selling summary
             print("6")
 
-            pass
         elif type(user_input) == str:  # User adds coin
-            print("string")
-
-            print(user_input)
             user_input = user_input[0:-1]  # Get rid of letters
-            print(user_input)
             user_walet.add_coin(int(user_input))  # Adds coin to user walet
-            interface.you_have_msg(user_walet.user_value())
+        interface.you_have_msg(user_walet.user_value())
 
-        print("111", basket.basket_inventory())
-        print("222", user_walet.coins)
 
 
 

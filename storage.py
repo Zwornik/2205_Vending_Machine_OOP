@@ -7,7 +7,7 @@ class Storage:
                     # selection number assigned to snack names
 
     def __init__(self):
-        self.snacks_in = dict  # ???? is that declaration ok?
+        self.snacks_in = {}  # ???? is that declaration ok?
 
     def auto_supply(self):  # automatically insert snack supply
         self.snacks_in = {'CHOCOLATE': 5, 'MUESLI BAR': 5, 'APPLE': 5, 'POPCORN': 5,
@@ -31,3 +31,5 @@ class Storage:
             self.snacks_in[snack] -= basket[snack]
 
 
+s=Storage()
+print(s.check_snack(2))

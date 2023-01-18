@@ -6,7 +6,6 @@ class Basket:
         self.basket_has = {}  # Contains selected snacks
 
     def add_snack(self, snack, ):  # Add snack to basket
-        print(snack, type(self.basket_has), self.basket_has)
         if snack in self.basket_has:
             self.basket_has[snack] += 1
         else:

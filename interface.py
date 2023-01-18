@@ -46,25 +46,37 @@ class Interface:
                 else:
                     print('Wrong input. Please option integer number.')
         print('\nYou have loaded: \n')
-        self.print_table(start_snacks)
+        self.print_table(start_snacks, True, True)
         return start_snacks
 
-    def print_table(self, content):  # ???? function modified depending on type.
+    def print_table(self, content, summ, header):  # ???? function modified depending on type.
         # When new type added another ELIF would have to be added
         if len(content) > 0:
             if type(list(content.keys())[0]) == str:  # Find the longest key in content(dict). Keys are strings
                 longest = max(len(x) for x in content)
                 justify = "<"
-                text = "{0:<{2}}    {1:>6d}\n".format('TOTAL', sum(content.values()), longest)
+                footer = "{0:<{2}}    {1:>6d}\n".format('TOTAL', sum(content.values()), longest)
             else:  # Keys are integers
-                longest = str(max(x for x in content))
-                longest = len(longest)
-                justify = ">"
-                text = "{0:>{2}} £{1:>6.2f}\n".format('TOTAL', sum(k * v for k, v in content.items()) / 100 , longest)
+                total = sum(k * v for k, v in content.items()) / 100
+                content_new = {}
+                for k in content.keys():
+                    if k in (100, 200):
+                        new_k = "£" + str(int(k / 100))
+                    else:
+                        new_k = str(k) + "p"
+                    content_new[new_k] = content[k]
+                content = content_new
+                del content_new
 
-            print("{0:{3}{2}}    {1:>6}".format("Item", "Quantity", longest, justify))
+                longest = max(len(x) for x in content)
+                justify = ">"
+                footer = "{0:>{2}} £{1:>6.2f}\n".format('TOTAL', total, longest)
+
+            if header:
+                print("{0:{3}{2}}    {1:>6}".format("Item", "Quantity", longest, justify))
             [(print("{0:{3}{2}}    {1:>6}".format(key, value, longest, justify))) for key, value in content.items()]
-            print(text)
+            if summ:
+                print(footer)
         else:
             print("None.")
 
@@ -93,29 +105,29 @@ class Interface:
 
     def auto_load_msg(self, load):
         print("I have automatically loaded snacks: ")
-        self.print_table(load)
+        self.print_table(load, True, True)
 
     def i_contain_coins_msg(self, coins):
         print("I contain following coins: ")
-        self.print_table(coins)
+        self.print_table(coins, True, True)
 
-    def inefficient_funds_msg(self):
-        print("Insufficient funds. Please add more coins. ")
+    def inefficient_funds_msg(self, missing):
+        print("Insufficient funds. Please add £{:.2f} to buy this snack.".format(missing/ 100))
 
     def small_menu(self):
         print("Select a snack (1-5), confirm (0) or insert more coins")
 
-    def change_return_msg(self, change_coins):
+    def change_return_msg(self, change_coins, value):
         if len(change_coins) > 0:
-            print("Here is your change in following coins:")
-            self.print_table(change_coins)
+            print("Here is £{:.2f} change in following coins:".format(value/100))
+            self.print_table(change_coins, False, True)
         else:
             print("No change to be returned.")
 
     def snacks_bought_msg(self, snacks):
         if len(snacks) > 0:
             print("Here you have snacks you bought:")
-            self.print_table(snacks)
+            self.print_table(snacks, False, False)
             print("HAVE A GOOD MEAL!")
         else:
             print("You haven't selected any snack. \nThank you for using this machine. ")
@@ -128,3 +140,7 @@ class Interface:
 
     def you_added_msg(self, coin):
         print("You added")
+
+    def your_basket_msg(self, basket):
+        print("Your basket contains:")
+        self.print_table(basket, False, False)

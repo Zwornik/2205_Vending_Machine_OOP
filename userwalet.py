@@ -17,7 +17,6 @@ class User_walet:
             self.coins[coin] += 1
         else:
             self.coins[coin] = 1
-        print(self.coins)
 
     def user_coins(self):  # ???? Wouldn't be better just to read value of COINS directly without using method?
         return self.coins
