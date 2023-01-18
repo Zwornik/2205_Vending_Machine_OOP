@@ -2,7 +2,7 @@
 
 
 class Money:
-    INIT_NOMINATIONS = {200: 2, 100: 2, 50: 2, 20: 2, 10: 2, 5: 2, 2: 2, 1: 2, }  # initial nominations machine contains
+    INIT_NOMINATIONS = {200: 2, 100: 1, 50: 0, 20: 1, 10: 1, 5: 0, 2: 1, 1: 3, }  # initial nominations machine contains
 
     def __init__(self):
         self.money_in = Money.INIT_NOMINATIONS.copy()  # Coins container, stores info about nominations in the machine

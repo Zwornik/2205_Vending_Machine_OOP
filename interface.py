@@ -13,8 +13,8 @@ class Interface:
         # Is it allowed with breaking SRP
 
     def intro(self, value):
-        input('\nPress enter to start using machine\n__________________________________\n')
-        print('Welcome new customer! How can I be of help? \n'
+        input('Press enter to start using machine\n__________________________________\n')
+        print('Welcome new customer! \n'
               'MENU:\n'
               'Type one of the following to insert a coin: 1p, 2p, 5p, 10p, 20p, 50p, 1GBP or 2GBP\n'
               'or option 1-6 to select an below option:\n'
@@ -83,8 +83,15 @@ class Interface:
     def i_contain_value_msg(self, value):  # prints value of money in the machine
         print('I contain £{:.2f} of change.'.format(value / 100))
 
-    def you_have_msg(self, value):
-        print('You have £{:.2f}'.format(value / 100))
+    def you_have_msg(self, value, affordable, snack_selected):
+        print('You have £{:.2f}.'.format(value / 100), end=" ")
+
+        if not affordable:
+            print("Please insert more coins.")
+        elif affordable and not snack_selected:
+            print("Add more coins or select a snack (1 -5).")
+        elif affordable and snack_selected:
+            print("Add more coins, select a snack (1 -5) or confirm purchase (0).")
 
     def user_input(self):  # ?????? return from this method is sent to several places in mian file. Does that break SRP
 
@@ -126,21 +133,23 @@ class Interface:
 
     def snacks_bought_msg(self, snacks):
         if len(snacks) > 0:
-            print("Here you have snacks you bought:")
+            print("\nHere you have snacks you bought:")
             self.print_table(snacks, False, False)
             print("HAVE A GOOD MEAL!")
         else:
             print("You haven't selected any snack. \nThank you for using this machine. ")
 
     def no_change_msg(self, missing):
-        print(f'Upsss! \n'
-              f'I contain no more coins so I am not able to give you remaining £{missing/100} change.\n'
+        print(f'I contain no more coins so I am not able to give you remaining £{missing/100} change.\n'
               f'Please write to Prime Minister to get your money back.\n'
               f'SORRY :-(')
 
-    def you_added_msg(self, coin):
-        print("You added")
+    def next_client(self):
+        input("\nNext client please. Press 'Enter' to continue.\n")
 
     def your_basket_msg(self, basket):
         print("Your basket contains:")
         self.print_table(basket, False, False)
+
+    def out_of_snacks(self, snack_name):
+        print("There is no more {} available. Please select other snack.".format(snack_name))

@@ -1,5 +1,6 @@
 """Represents shopping basket of the client"""
 
+
 class Basket:
 
     def __init__(self):

@@ -7,7 +7,8 @@ class Storage:
                     # selection number assigned to snack names
 
     def __init__(self):
-        self.snacks_in = {}  # ???? is that declaration ok?
+        self.snacks_in = {'CHOCOLATE': 5, 'MUESLI BAR': 1, 'APPLE': 5, 'POPCORN': 5,
+                          'CHEESE PUFFS': 5}  # ???? is that declaration ok?
 
     def auto_supply(self):  # automatically insert snack supply
         self.snacks_in = {'CHOCOLATE': 5, 'MUESLI BAR': 5, 'APPLE': 5, 'POPCORN': 5,
@@ -23,7 +24,7 @@ class Storage:
     def snack_inventory(self):  # Return snack inventory
         return self.snacks_in
 
-    def check_snack(self, snack_no):  # Returns count of selected snack in the machine
+    def check_snack(self, snack_no):  # Returns count of selected snack number in the machine
         return self.snacks_in[Storage.SNACK_NAMES[snack_no]]
 
     def give_snacks(self, basket):  # Deduct basket snacks from snacks inventory
@@ -31,5 +32,5 @@ class Storage:
             self.snacks_in[snack] -= basket[snack]
 
 
-s=Storage()
-print(s.check_snack(2))
+# s=Storage()
+# print(s.check_snack(2))
