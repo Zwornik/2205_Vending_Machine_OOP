@@ -3,26 +3,26 @@
 
 class Storage:
 
-    SNACK_NAMES = {1: 'CHOCOLATE', 2: 'MUESLI BAR', 3: 'APPLE', 4: 'POPCORN', 5: 'CHEESE PUFFS'}  # user
-                    # selection number assigned to snack names
+    SNACK_NAMES = {1: 'CHOCOLATE', 2: 'MUESLI BAR', 3: 'APPLE', 4: 'POPCORN', 5: 'CHEESE PUFFS'}  # Stores snacks names
+    # with assigned number for easier user selection
 
     def __init__(self):
-        self.snacks_in = {'CHOCOLATE': 5, 'MUESLI BAR': 1, 'APPLE': 5, 'POPCORN': 5,
-                          'CHEESE PUFFS': 5}  # ???? is that declaration ok?
+        self.snacks_in = {}  # Contains dict with snacks e.g. {1: 'CHOCOLATE', 2: 'MUESLI BAR'...}
 
     def auto_supply(self):  # automatically insert snack supply
-        self.snacks_in = {'CHOCOLATE': 5, 'MUESLI BAR': 5, 'APPLE': 5, 'POPCORN': 5,
+        self.snacks_in = {'CHOCOLATE': 1, 'MUESLI BAR': 2, 'APPLE': 3, 'POPCORN': 5,
                           'CHEESE PUFFS': 5}
 
     def empty_storage(self):  # Empty snack storage
         self.snacks_in = {'CHOCOLATE': 0, 'MUESLI BAR': 0, 'APPLE': 0, 'POPCORN': 0,
                           'CHEESE PUFFS': 0}
 
-    def load_snacks(self, snacks):  # Load snacks to the machine(inventory)
+    def load_snacks(self, snacks):  # Load snacks (dictionary e.g. e.g. {1: 'CHOCOLATE',...) to the machine(inventory)
         self.snacks_in = snacks
 
-    def snack_inventory(self):  # Return snack inventory
+    def inventory(self):  # Return snack inventory
         return self.snacks_in
+
 
     def check_snack(self, snack_no):  # Returns count of selected snack number in the machine
         return self.snacks_in[Storage.SNACK_NAMES[snack_no]]
