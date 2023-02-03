@@ -23,5 +23,3 @@ class User_walet:
 
     def reset_user_coins(self):  # Zero user's walet
         self.coins = {}
-
-

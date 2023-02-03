@@ -1,36 +1,48 @@
 """Snacks container in the machine"""
 
+import settings
+
 
 class Storage:
 
-    SNACK_NAMES = {1: 'CHOCOLATE', 2: 'MUESLI BAR', 3: 'APPLE', 4: 'POPCORN', 5: 'CHEESE PUFFS'}  # Stores snacks names
-    # with assigned number for easier user selection
+    SNACK_PRICES = settings.INITIAL_SNACK_PRICES  # Snack names with prices in pence
 
     def __init__(self):
-        self.snacks_in = {}  # Contains dict with snacks e.g. {1: 'CHOCOLATE', 2: 'MUESLI BAR'...}
+        self.snacks_and_prices_in = Storage.SNACK_PRICES.copy()  # Contains dict of snacks with price and initial
+        # quantity e.g. {Snack names: [price, quantity when auto supplied/loaded ], ...}.
 
-    def auto_supply(self):  # automatically insert snack supply
-        self.snacks_in = {'CHOCOLATE': 1, 'MUESLI BAR': 2, 'APPLE': 3, 'POPCORN': 5,
-                          'CHEESE PUFFS': 5}
+    def get_snack_price(self, name):
+        return self.snacks_and_prices_in[name][0]
 
-    def empty_storage(self):  # Empty snack storage
-        self.snacks_in = {'CHOCOLATE': 0, 'MUESLI BAR': 0, 'APPLE': 0, 'POPCORN': 0,
-                          'CHEESE PUFFS': 0}
+    def get_snack_quantity(self, name):
+        return self.snacks_and_prices_in[name][1]
+
+    # def auto_supply(self):  # automatically insert snack supply
+    #     self.snacks_and_prices_in = Storage.SNACK_PRICES
 
     def load_snacks(self, snacks):  # Load snacks (dictionary e.g. e.g. {1: 'CHOCOLATE',...) to the machine(inventory)
-        self.snacks_in = snacks
+        self.snacks_and_prices_in = snacks
+        print(self.snacks_and_prices_in)
 
-    def inventory(self):  # Return snack inventory
-        return self.snacks_in
-
+    def inventory(self):  # Return snack inventory with prices
+        return self.snacks_and_prices_in
 
     def check_snack(self, snack_no):  # Returns count of selected snack number in the machine
-        return self.snacks_in[Storage.SNACK_NAMES[snack_no]]
+        re = self.get_snack_quantity(self.snack_name_by_selection_no(snack_no))
+        return re
 
     def give_snacks(self, basket):  # Deduct basket snacks from snacks inventory
         for snack in basket.keys():
-            self.snacks_in[snack] -= basket[snack]
+            self.snacks_and_prices_in[snack][1] -= basket[snack][1]
 
+    def snack_name_by_selection_no(self, snack_no):  # return name (key) of dict item when menu number is given, where
+        # menu number is 1 larger than item index
+        index = snack_no - 1
+        print(index)
+        return list(self.inventory())[index]
 
-# s=Storage()
-# print(s.check_snack(2))
+    def snack_selection_no_by_name(self, name):  # return index+1 of dict item when name (key) is given
+        return list(self.inventory().keys()).index(name) + 1
+
+    def snack_price_by_selection_no(self, snack_no):
+        return self.get_snack_price(self.snack_name_by_selection_no(int(snack_no)))
