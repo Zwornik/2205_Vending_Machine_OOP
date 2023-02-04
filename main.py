@@ -4,6 +4,7 @@ from interface import Interface
 from money import Money
 from userwalet import User_walet
 from basket import Basket
+from checkout import Checkout
 
 
 storage = Storage()  # Represents snack_name container in the Machine
@@ -11,6 +12,8 @@ money = Money()  # Represents money container in the machine
 user_walet = User_walet()  # Represents User cash in the machine
 interface = Interface()  # It is machine touch display showing messages to the user and collecting user inputs
 basket = Basket()  # It is user snacks selection before transaction
+checkout = Checkout(money, user_walet, storage, basket, interface)  # Responsible for all processes related to
+# approving transaction
 
 
 def main(count):  # Main program sequence.
@@ -71,7 +74,6 @@ def shopping_sequence():  # Main shopping sequence loop
             checkout.transfer_money(user_walet.user_coins())
             checkout.display_transaction_confirmation(basket.basket_has)
             checkout.deduct_snacks(basket.basket_has)
-
             break
 
         elif user_input == 9:  # Go to admin menu
@@ -88,32 +90,6 @@ def shopping_sequence():  # Main shopping sequence loop
             affordable = False
         interface.you_have_msg(user_walet.user_value() - basket.basket_value(), affordable, len(basket.basket_has))
         # Display current money in the wallet and message suggesting next step
-
-
-class Checkout:
-
-    def return_change(self, user_value, basket_value):
-        change_returned = money.return_change(user_value, basket_value)  # e.g. ({dict of
-        # coins to be returned}, returned amount, Amount not returned)
-        interface.change_return_msg(change_returned[0], change_returned[1])  # Display returned coins
-        if change_returned[2]:
-            interface.no_change_msg(change_returned[2])
-
-    def transfer_money(self, walet):  # Add user coins to the machine
-        money.add_money(walet)
-        user_walet.reset_user_coins()  # Empty user money
-
-    def display_transaction_confirmation(self, basket_has):
-        interface.snacks_bought_msg(basket_has)  # Display bought snacks
-
-    def deduct_snacks(self, basket_has):  # ???? Name of this parameter is the same as method in Basket, is it ok?
-        storage.give_snacks(basket_has)  # Deducting snack_name from basket from machine inventory
-        basket.reset_basket()  # Reset basket to empty
-
-
-
-
-checkout = Checkout()
 
 
 def admin_choice():  # Sequence of admin menu
