@@ -20,11 +20,11 @@ class Interface:
         # Store coins nominations
 
     def next_client(self, coins, snacks, count, coins_value):  # Initial message of shopping sequence
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         if count:
-            print("\nNext client please. Press 'Enter' to continue.")
+            input("Next client please. Press 'Enter' to continue.")
         else:
-            print("\nPress 'Enter' to start using machine")
-        input("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+            input("Press 'Enter' to start using machine")
         self.double_table(coins, snacks, coins_value)
 
     def main_menu(self, cash, snacks_and_prices):  # Intro menu for the client
@@ -94,7 +94,6 @@ class Interface:
 
     def print_table(self, content, summ, header):  # ???? This method is dependent on several methods which breaks SRP,
         # how can I fix it? # Print table with snacks or coins (dict, bool, bool)
-        print(content)
         if len(content) > 0:
             if type(list(content.keys())[0]) == str:  # If Keys are strings (snacks) find the longest key in
                 # content(dict).
@@ -135,19 +134,19 @@ class Interface:
 
     def double_table(self, coins_in, snacks_in, coins_value):  # Print two dictionaries side by side at once
         print("I contain following number of coins and snacks:")
-        coins_total = sum(k * v for k, v in coins_in.items()) / 100  # Calculate total of all coins
-        snacks_total = sum(value[1] for value in snacks_in.values())  # Calculate total of all snacks
+        coins_total = sum(k * v for k, v in coins_in.items()) / 100  # Calculate total value of all coins
+        snacks_total = sum(value[1] for value in snacks_in.values())  # Calculate total quantity of all snacks
 
-        coins_formated = {}  # empty
+        coins_formatted = {}  # Contains coins formatted to 'str' with "£" prefix ot "p" suffix
         snacks = {}
         for k in coins_in.keys():  # Convert coins to str and add prefix "£" or "p"
             if k in (100, 200):
                 new_k = "£" + str(int(k / 100))
             else:
                 new_k = str(k) + "p"
-            coins_formated[new_k] = coins_in[k]  # Add coins to temporary dict
-        coins = coins_formated
-        del coins_formated
+            coins_formatted[new_k] = coins_in[k]  # Add coins to temporary dict
+        coins = coins_formatted
+        del coins_formatted
 
         print("{0:>5}    {1:>8}      │     {2:<12}  {3:>6} - {4:>4}".format("Coins", "Quantity", "Snacks",
                                                                             "Quantity", "Price"))  # Header
@@ -168,7 +167,8 @@ class Interface:
                                                                                      snack_count, price,
                                                                                      sufix))  # Body of the table
 
-        print("{0:>5}   £{1:>8.2f}      │     {2:<12}{3:>6}\n".format("TOTAL", coins_value/100,"TOTAL QUANTITY", snacks_total))  # Footer
+        print("{0:>5}   £{1:>8.2f}      │     {2:<12}{3:>6}\n".format("TOTAL", coins_value/100,"TOTAL QUANTITY",
+                                                                      snacks_total))  # Footer
 
     def i_contain_value_msg(self, value):  # prints value of money in the machine
         print("I contain £{:.2f} of change.".format(value / 100))
@@ -187,7 +187,7 @@ class Interface:
         while True:
             user_choice = input("----> ").lower()
             if user_choice in Interface.MENU:  # Check if user selection is in the menu
-                user_choice = int(user_choice)  # convert to int if is
+                user_choice = int(user_choice)  # convert to int
                 return user_choice
 
             elif user_choice in Interface.COIN_TYPES and who == "client":  # If the client add a coin
@@ -209,11 +209,11 @@ class Interface:
         print("Insufficient funds. Please add £{:.2f} to buy this snack.".format(missing / 100))
 
     def change_return_msg(self, change_coins, value):
-        if len(change_coins) > 0:
-            print("Here is £{:.2f} change in following coins:".format(value / 100))
-            self.print_table(change_coins, False, True)
-        else:
-            print("No change to be returned.")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("YOUR TRANSACTION: ")
+        print("Here is £{:.2f} change in following coins:".format(value / 100))
+        self.print_table(change_coins, False, True)
+
 
     def snacks_bought_msg(self, snacks):
         if len(snacks) > 0:
@@ -224,9 +224,9 @@ class Interface:
             print("You haven't selected any snack. \nThank you for using this machine. ")
 
     def no_change_msg(self, missing):
-        print(f"I contain no more coins so I am not able to give you remaining £{missing / 100} change.\n"
-              f"Please write to Prime Minister to get your money back.\n"
-              f"SORRY :-(")
+        aaa = f"I contain no more coins so I am not able to give you remaining £{missing / 100} change.\n\
+Please write to Prime Minister to get your money back.\nSORRY :-("
+        print(aaa)
 
     def your_basket_msg(self, basket):
         print("Your basket contains:")

@@ -22,7 +22,6 @@ class Storage:
 
     def load_snacks(self, snacks):  # Load snacks (dictionary e.g. e.g. {1: 'CHOCOLATE',...) to the machine(inventory)
         self.snacks_and_prices_in = snacks
-        print(self.snacks_and_prices_in)
 
     def inventory(self):  # Return snack inventory with prices
         return self.snacks_and_prices_in
@@ -38,7 +37,6 @@ class Storage:
     def snack_name_by_selection_no(self, snack_no):  # return name (key) of dict item when menu number is given, where
         # menu number is 1 larger than item index
         index = snack_no - 1
-        print(index)
         return list(self.inventory())[index]
 
     def snack_selection_no_by_name(self, name):  # return index+1 of dict item when name (key) is given
@@ -46,3 +44,11 @@ class Storage:
 
     def snack_price_by_selection_no(self, snack_no):
         return self.get_snack_price(self.snack_name_by_selection_no(int(snack_no)))
+
+    def cheapest_snack(self):  # Return price of the cheapest snack available
+        cheapest = 1000
+        for i in self.snacks_and_prices_in:
+            if self.snacks_and_prices_in[i][0] < cheapest and self.snacks_and_prices_in[i][1] > 0:
+                cheapest = self.snacks_and_prices_in[i][0]
+        print("cheapest ", cheapest)
+        return cheapest

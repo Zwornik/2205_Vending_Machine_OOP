@@ -39,9 +39,10 @@ class Money:
         for i in self.money_in:  # "i" is a coin nominal
 
             if change == i:  # Return change of a single coin
-                change -= i  # Reduce return balance
-                self.money_in[i] -= 1  # Subtracts coin from coins container
-                change_coins[i] = 1  # Add coin to be returned
+                if self.money_in[i] > 0:  # Check if coin is available
+                    change -= i  # Reduce return balance
+                    self.money_in[i] -= 1  # Subtracts coin from coins container
+                    change_coins[i] = 1  # Add coin to be returned
 
             elif change > i:  # return change of more than a single coins
                 quotient = change // i
@@ -52,9 +53,9 @@ class Money:
                     self.money_in[i] -= quotient  # subtracts coins from coins container
                     change_coins[i] = quotient  # Add coins to be returned
 
-        change_value = sum(k * v for k, v in change_coins.items())  # Calculate value of all returned coins
-        remaining = user_amount - basket_value - change_value  # Amount not fully returned
+        returned_value = sum(k * v for k, v in change_coins.items())  # Calculate value of all returned coins
+        remaining = user_amount - basket_value - returned_value  # Amount not fully returned
 
-        return change_coins, change_value, remaining  # e.g. ({50: 1, 20: 2, 5: 1, 1:3},
-        # 13 (amount that can not be returned because lack of coins), True)
+        return change_coins, returned_value, remaining  # e.g. ({50: 1, 20: 2, 5: 1, 1:3},
+        # 13 , 17 (amount that can not be returned because lack of coins))
 

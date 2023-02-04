@@ -28,7 +28,8 @@ def intro(count):  # Initial menu for loading snacks
             load_snacks()
     interface.next_client(money.inventory(), storage.inventory(), count, money.amount_in())  # Initial message of
     # shopping sequence
-    interface.main_menu(user_walet.user_value(), storage.inventory())  # Welcome message with menu for the client
+    interface.main_menu(user_walet.user_value(), storage.inventory())  # Welcome message
+    # with menu for the client
 
 
 def shopping_sequence():  # Main shopping sequence loop
@@ -66,16 +67,11 @@ def shopping_sequence():  # Main shopping sequence loop
             # Display message about insufficient funds.
 
         elif user_input == 0:  # User confirms purchase
-            money.add_money(user_walet.user_coins())  # Add user coins to the machine
-            change_returned = money.return_change(user_walet.user_value(), basket.basket_value())  # e.g. ({dict of
-            # coins to be returned}, returned amount, Amount not returned)
-            interface.change_return_msg(change_returned[0], change_returned[1])  # Display returned coins
-            storage.give_snacks(basket.basket_has)  # Deducting snack_name from basket from machine inventory
-            interface.snacks_bought_msg(basket.basket_has)  # Display bought snacks
-            if change_returned[2]:
-                interface.no_change_msg(change_returned[2])
-            basket.reset_basket()  # Reset basket to empty
-            user_walet.reset_user_coins()  # Empty user money
+            checkout.return_change(user_walet.user_value(), basket.basket_value())
+            checkout.transfer_money(user_walet.user_coins())
+            checkout.display_transaction_confirmation(basket.basket_has)
+            checkout.deduct_snacks(basket.basket_has)
+
             break
 
         elif user_input == 9:  # Go to admin menu
@@ -85,7 +81,7 @@ def shopping_sequence():  # Main shopping sequence loop
             user_input = user_input[0:-1]  # Get rid of letters
             user_walet.add_coin(int(user_input))  # Adds coin to user walet
 
-        if user_walet.user_value() > basket.basket_value() + input_price:
+        if user_walet.user_value() >= basket.basket_value() + input_price:
             # Check if there is enough money in the Client's wallet to buy selected snacks in basket
             affordable = True
         else:
@@ -96,23 +92,25 @@ def shopping_sequence():  # Main shopping sequence loop
 
 class Checkout:
 
-    def transfer_money(self):  # Add user coins to the machine
-        money.add_money(user_walet.user_coins())
-        user_walet.reset_user_coins()  # Empty user money
-
-    def return_change(self):
-        change_returned = money.return_change(user_walet.user_value(), basket.basket_value())  # e.g. ({dict of
+    def return_change(self, user_value, basket_value):
+        change_returned = money.return_change(user_value, basket_value)  # e.g. ({dict of
         # coins to be returned}, returned amount, Amount not returned)
         interface.change_return_msg(change_returned[0], change_returned[1])  # Display returned coins
-
-    def deduct_snacks(self):
-        storage.give_snacks(basket.basket_has)  # Deducting snack_name from basket from machine inventory
-        basket.reset_basket()  # Reset basket to empty
-
-    def display_transaction_confirmation(self):
-        interface.snacks_bought_msg(basket.basket_has)  # Display bought snacks
         if change_returned[2]:
             interface.no_change_msg(change_returned[2])
+
+    def transfer_money(self, walet):  # Add user coins to the machine
+        money.add_money(walet)
+        user_walet.reset_user_coins()  # Empty user money
+
+    def display_transaction_confirmation(self, basket_has):
+        interface.snacks_bought_msg(basket_has)  # Display bought snacks
+
+    def deduct_snacks(self, basket_has):  # ???? Name of this parameter is the same as method in Basket, is it ok?
+        storage.give_snacks(basket_has)  # Deducting snack_name from basket from machine inventory
+        basket.reset_basket()  # Reset basket to empty
+
+
 
 
 checkout = Checkout()

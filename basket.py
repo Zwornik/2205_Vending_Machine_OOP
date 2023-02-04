@@ -13,7 +13,6 @@ class Basket:
             self.basket_has[snack_name] = [snacks_and_prices[snack_name][0], 1]
 
     def basket_inventory(self):  # Return snack in basket
-        print(self.basket_has)
         return self.basket_has  # e.g. {'CHOCOLATE': 2, 'MUESLI BAR': 3}
 
     def reset_basket(self):  # Zero the basket
