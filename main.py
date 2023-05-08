@@ -1,4 +1,4 @@
-import settings
+import configuration
 from storage import Storage
 from interface import Interface
 from money import Money
@@ -12,7 +12,7 @@ money = Money()  # Represents money container in the machine
 user_walet = User_walet()  # Represents User cash in the machine
 interface = Interface()  # It is machine touch display showing messages to the user and collecting user inputs
 basket = Basket()  # It is user snacks selection before transaction
-checkout = Checkout(money, user_walet, storage, basket, interface)  # Responsible for all processes related to
+checkout = Checkout(money, user_walet, storage,)  # Responsible for all processes related to
 # approving transaction
 
 
@@ -41,12 +41,12 @@ def shopping_sequence():  # Main shopping sequence loop
         user_money = user_walet.user_value()
         user_input = interface.user_input("client")
 
-        if user_input in settings.snack_menu:  # Get snack_name price if user selected snack_name
+        if user_input in configuration.snack_menu:  # Get snack_name price if user selected snack_name
             input_price = storage.snack_price_by_selection_no(user_input)
         else:
             input_price = 0
 
-        if user_input in settings.snack_menu and user_money >= basket.basket_value() + input_price:  # User adds snack_name
+        if user_input in configuration.snack_menu and user_money >= basket.basket_value() + input_price:  # User adds snack_name
             # to his basket
             snack_name = storage.snack_name_by_selection_no(user_input)  # Selected snack name
 
@@ -64,16 +64,13 @@ def shopping_sequence():  # Main shopping sequence loop
             else:
                 interface.out_of_snacks(snack_name)
 
-        elif user_input in settings.snack_menu and user_money < basket.basket_value() + input_price:  # User adds
+        elif user_input in configuration.snack_menu and user_money < basket.basket_value() + input_price:  # User adds
             # snack_name to his basket but has no money
             interface.insufficient_funds_msg(basket.basket_value() + input_price - user_money)
             # Display message about insufficient funds.
 
         elif user_input == 0:  # User confirms purchase
-            checkout.return_change(user_walet.user_value(), basket.basket_value())
-            checkout.transfer_money(user_walet.user_coins())
-            checkout.display_transaction_confirmation(basket.basket_has)
-            checkout.deduct_snacks(basket.basket_has)
+            checkout.complete_purchase(basket, user_walet)
             break
 
         elif user_input == 9:  # Go to admin menu

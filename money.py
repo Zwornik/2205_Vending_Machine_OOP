@@ -1,18 +1,25 @@
 """Money container in the machine"""
 
-import settings
+import configuration
 
 
 class Money:
 
-    INITIAL_NOMINATIONS = settings.INITIAL_NOMINATIONS  # initial nominations machine contains
+    INITIAL_NOMINATIONS = configuration.INITIAL_NOMINATIONS  # initial nominations machine contains
 
     def __init__(self):
-        self.money_in = self.get_nominations().copy()  # Coins container, coins in pence e.g. {200: 2, 100: 1, 50: 1,..}
+        # self.money_in = self.get_nominations().copy()  # Coins container, coins in pence e.g. {200: 2, 100: 1, 50: 1,..}
+        self.set_nominations(Money.INITIAL_NOMINATIONS)
         self.initial_value = self.amount_in()  # Money in machine at the beginning of the day
 
     def get_nominations(self):
         return Money.INITIAL_NOMINATIONS
+
+    def set_nominations(self, initial_nominations):
+        self.money_in = initial_nominations.copy()
+
+    def get_money_in(self):
+        return self.money_in
 
     def inventory(self):  # return nominations possessed
         return self.money_in

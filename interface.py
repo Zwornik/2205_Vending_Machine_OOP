@@ -3,15 +3,15 @@
 
 from storage import Storage
 from money import Money
-import settings
+import configuration
 
 storage = Storage()
 money = Money()
 
 
 class Interface:
-    COIN_TYPES = settings.COIN_TYPES  # ???? these variables are stored in "settings" file. Is it okey to make class
-    MENU = settings.MENU
+    COIN_TYPES = configuration.COIN_TYPES  # ???? these variables are stored in "settings" file. Is it okey to make class
+    MENU = configuration.MENU
 
     def __init__(self):
         self.initial_nominations = money.get_nominations()  # ???? To use get method in Money class I created instance

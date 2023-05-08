@@ -1,11 +1,11 @@
 """Snacks container in the machine"""
 
-import settings
+import configuration
 
 
 class Storage:
 
-    SNACK_PRICES = settings.INITIAL_SNACK_PRICES  # Snack names with prices in pence
+    SNACK_PRICES = configuration.INITIAL_SNACK_PRICES  # Snack names with prices in pence
 
     def __init__(self):
         self.snacks_and_prices_in = Storage.SNACK_PRICES.copy()  # Contains dict of snacks with price and initial
